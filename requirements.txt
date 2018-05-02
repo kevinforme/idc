@@ -1,5 +1,6 @@
 alembic==0.9.9
 click==6.7
+coverage==4.5.1
 Flask==1.0.1
 Flask-Migrate==2.1.1
 Flask-SQLAlchemy==2.3.2
@@ -10,6 +11,7 @@ MarkupSafe==1.0
 PyMySQL==0.8.0
 python-dateutil==2.7.2
 python-editor==1.0.3
+selenium==3.11.0
 six==1.11.0
 SQLAlchemy==1.2.7
 Werkzeug==0.14.1
