@@ -1,0 +1,18 @@
+<ul class="notices">
+    {% for notice in notices %}
+        <li class="notice">
+            <div class="notice-date">
+                {{ notice.timestamp }}
+            </div>
+            <div class="profile-thumbnail">
+                <div class="notice-author">
+                    {{ notice.author.username }}
+                </div>
+            </div>
+            <div class="notice-body" style="color: #333333">
+                <h4>{{ notice.body }}</h4>
+            </div>
+        </li>
+        <hr>
+    {% endfor %}
+</ul>

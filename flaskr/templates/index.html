@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as macros %}
+
+{% block col_left %}
+    <a href="{{ url_for('main.edit_notice') }}" class="btn btn-default btn_add">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+    </a>
+    {% include '_notices.html' %}
+    {% if pagination_notice %}
+        <div class="pagination">
+            {{ macros.pagination_widget(pagination_notice,'.index') }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block col_right %}
+    <a href="{{ url_for('main.edit_event') }}" class="btn btn-default btn_add">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+    </a>
+    {% include '_events.html' %}
+{% endblock %}

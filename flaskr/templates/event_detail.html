@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block container_content %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <a href="{{ url_for('main.edit_detail',id=event.id) }}" class="btn btn-default btn_add">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+            </a>
+            <ul class="events">
+                {% for event_detail in event_details %}
+                    <li class="event event_detail">
+                        <div class="event-date">
+                            {{ event_detail.timestamp }}
+                        </div>
+                        <div class="event-author">
+                            {{ event_detail.user.username }}
+                        </div>
+                        <div class="event-name" style="color: #333333">
+                            <h4>{{ event_detail.body }}</h4>
+                        </div>
+                    </li>
+                    <hr>
+                    <div align="center">
+                    <button type="button" class="btn btn-default btn-lg btn_go">
+                        <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                    </button>
+                    </div>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+{% endblock %}

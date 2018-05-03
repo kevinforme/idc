@@ -1,0 +1,38 @@
+a.navbar-brand img{
+    position: relative;
+    top: -12px;
+}
+body { padding-top: 70px; }
+a.btn_add{
+    border: none;
+}
+ul{
+    list-style: none;
+}
+div.notice-date,div.event-date{
+    float: right;
+}
+ul.notices,ul.events{
+    margin-left: -30px;
+}
+li.notice,li.event{
+    padding: 10px 15px 10px 10px;
+    margin: 0;
+    border-radius: 7px;
+}
+li.notice:hover,li.event:hover{
+    background-color: #cccccc;
+}
+hr{
+    margin: 0;
+}
+button.btn_go{
+    display: inline-block;
+    border: none;
+}
+button.btn_go:hover{
+    background-color: transparent;
+}
+li.event_detail{
+    background-color: #eee;
+}
