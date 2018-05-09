@@ -3,7 +3,7 @@
 
 {% block col_left %}
     <a href="{{ url_for('main.edit_notice') }}" class="btn btn-default btn_add">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加通知
     </a>
     {% include '_notices.html' %}
     {% if pagination_notice %}
@@ -15,7 +15,7 @@
 
 {% block col_right %}
     <a href="{{ url_for('main.edit_event') }}" class="btn btn-default btn_add">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加事件
     </a>
     {% include '_events.html' %}
 {% endblock %}

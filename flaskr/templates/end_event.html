@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as macros %}
+
+
+{% block container_content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <ul class="events">
+                {% for event in events %}
+                    <li class="event">
+                        <a href="{{ url_for('main.event_detail',id=event.id) }}">
+                            <div class="event-date">
+                                开始于:{{ moment(event.start_time).format('YYYY年M月D日') }}
+                            </div>
+                            <div class="profile-thumbnail">
+                                <div class="event-author">
+                                    {{ event.author.username }}
+                                </div>
+                            </div>
+                            <div class="event-name" style="color: #333333">
+                                <h4>{{ event.name }}</h4>
+                            </div>
+                            <div class="event-end-date" align="right">
+                                结束于:{{ moment(event.end_time).format('YYYY年M月D日') }}
+                            </div>
+                        </a>
+                    </li>
+                    <hr>
+                {% endfor %}
+            </ul>
+            {% if pagination %}
+                <div class="pagination">
+                    {{ macros.pagination_widget(pagination,'main.end_event') }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

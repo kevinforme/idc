@@ -1,9 +1,11 @@
+import datetime
+
 from flask import current_app, abort, request, render_template, flash, redirect, url_for
 from flask_login import current_user
 
 from flaskr import db
-from flaskr.main.forms import NoticeForm, EventForm, EventDetailForm
-from flaskr.models import Notice, Event, EventDetail
+from flaskr.main.forms import NoticeForm, EventForm, EventDetailForm, ResourceForm
+from flaskr.models import Notice, Event, EventDetail, Resource
 from . import main
 
 
@@ -21,10 +23,10 @@ def shutdown():
 @main.route('/')
 def index():
     page_notice = request.args.get('page', 1, type=int)
-    pagination_notice = Notice.query.order_by(Notice.timestamp.desc()).paginate(page_notice, per_page=7,
+    pagination_notice = Notice.query.order_by(Notice.timestamp.desc()).paginate(page_notice, per_page=10,
                                                                                 error_out=False)
     notices = pagination_notice.items
-    events = Event.query.order_by(Event.timestamp.desc()).all()
+    events = Event.query.filter_by(end=False).order_by(Event.start_time.desc()).all()
     return render_template('index.html', notices=notices, events=events, pagination_notice=pagination_notice)
 
 
@@ -54,7 +56,8 @@ def edit_event():
 def event_detail(id):
     event = Event.query.get_or_404(id)
     event_details = event.event_details.order_by(EventDetail.timestamp.asc()).all()
-    return render_template('event_detail.html', event_details=event_details,event=event)
+    ended = event.end
+    return render_template('event_detail.html', event_details=event_details, event=event, ended=ended)
 
 
 @main.route('/edit_detail/<int:id>', methods=['GET', 'POST'])
@@ -62,7 +65,63 @@ def edit_detail(id):
     form = EventDetailForm()
     event = Event.query.get_or_404(id)
     if form.validate_on_submit():
-        eventdetail = EventDetail(body=form.body.data, event=event,user=current_user._get_current_object())
+        eventdetail = EventDetail(body=form.body.data, event=event, user=current_user._get_current_object())
         db.session.add(eventdetail)
-        return redirect(url_for('main.event_detail',id=event.id))
+        return redirect(url_for('main.event_detail', id=event.id))
     return render_template('edit_detail.html', form=form)
+
+
+@main.route('/end_event')
+def end_event():
+    page = request.args.get('page', 1, type=int)
+    pagination = Event.query.filter_by(end=True).order_by(Event.start_time.desc()).paginate(page, per_page=10,
+                                                                                            error_out=False)
+    events = pagination.items
+    return render_template('end_event.html', events=events, pagination=pagination)
+
+
+@main.route('/go_end/<int:id>')
+def go_end(id):
+    event = Event.query.get_or_404(id)
+    event.end = True
+    event.end_time = datetime.datetime.utcnow()
+    db.session.add(event)
+    return redirect(url_for('main.index'))
+
+
+@main.route('/resource')
+def resource():
+    page = request.args.get('page', 1, type=int)
+    pagination = Resource.query.order_by(Resource.timestamp.desc()).paginate(page, per_page=12,
+                                                                             error_out=False)
+    resources = pagination.items
+    return render_template('resource.html', resources=resources, pagination=pagination)
+
+
+@main.route('/edit_resource', methods=['GET', 'POST'])
+def edit_resource():
+    form = ResourceForm()
+    if form.validate_on_submit():
+        resource = Resource(body=form.body.data, link=form.link.data, author=current_user._get_current_object())
+        db.session.add(resource)
+        return redirect(url_for('main.resource'))
+    return render_template('edit_resource.html', form=form)
+
+
+@main.route('/search', methods=['GET', 'POST'])
+def search():
+    keywords = request.form.get('keywords')
+    page_notice = request.args.get('page', 1, type=int)
+    pagination_notice = Notice.query.filter(Notice.body.like('%' + keywords + '%')).order_by(
+        Notice.timestamp.desc()).paginate(page_notice, per_page=7,
+                                          error_out=False)
+    notices = pagination_notice.items
+    events = Event.query.filter_by(end=False).order_by(Event.start_time.desc()).all()
+    return render_template('index.html', notices=notices, events=events, pagination_notice=pagination_notice)
+
+
+@main.route('/delete_notice/<int:id>')
+def delete_notice(id):
+    notice = Notice.query.get_or_404(id)
+    db.session.delete(notice)
+    return redirect(url_for('main.index'))

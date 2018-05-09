@@ -8,7 +8,7 @@ from . import auth
 
 @auth.before_app_request
 def before_request():
-    if current_user.is_anonymous and request.endpoint != 'auth.login':
+    if current_user.is_anonymous and request.endpoint[:5] != 'auth.' and request.endpoint != 'static':
         return redirect(url_for('auth.login'))
 
 

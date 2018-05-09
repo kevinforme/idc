@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% import '_macros.html' as macros %}
+
+{% block container_content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <a href="{{ url_for('main.edit_resource') }}" class="btn btn-default btn_add">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
+            </a>
+            <ul class="notices">
+                {% for resource in resources %}
+                    <li class="notice">
+                        <div class="notice-date">
+                            {{ moment(resource.timestamp).fromNow() }}
+                        </div>
+                        <div class="profile-thumbnail">
+                            <div class="notice-author">
+                                {{ resource.author.username }}
+                            </div>
+                        </div>
+                        <div class="notice-body" style="color: #333333">
+                            <h4>{{ resource.body }}</h4>
+                        </div>
+                        <div class="notice-body" style="color: #333333">
+                            <a href="{{ resource.link }}" target="_blank">{{ resource.link }}</a>
+                        </div>
+                    </li>
+                    <hr>
+                {% endfor %}
+            </ul>
+            {% if pagination %}
+                <div class="pagination">
+                    {{ macros.pagination_widget(pagination,'.resource') }}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

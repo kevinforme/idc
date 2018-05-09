@@ -66,4 +66,4 @@ class SeleniumTestCase(unittest.TestCase):
     def test_home_page(self):
         # navigate to home page
         self.client.get('http://localhost:5000/')
-        self.assertTrue(re.search('flask', self.client.page_source))
+        self.assertTrue(re.search('首页', self.client.page_source))

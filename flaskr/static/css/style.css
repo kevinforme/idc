@@ -36,3 +36,15 @@ button.btn_go:hover{
 li.event_detail{
     background-color: #eee;
 }
+a.btn_go_end{
+    float: right;
+}
+li.event>a{
+    color: #333333;
+}
+li.event>a:hover{
+    text-decoration: none;
+}
+.my_navbar{
+    color: #cccccc;
+}

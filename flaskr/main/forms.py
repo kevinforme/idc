@@ -16,3 +16,9 @@ class EventForm(FlaskForm):
 class EventDetailForm(FlaskForm):
     body = StringField('请输入事件', validators=[DataRequired(), Length(1, 128)])
     submit = SubmitField('发布')
+
+
+class ResourceForm(FlaskForm):
+    body = StringField('请输入资源信息', validators=[DataRequired(), Length(1, 128)])
+    link = StringField('请输入资源链接', validators=[DataRequired(), Length(1, 128)])
+    submit = SubmitField('发布')

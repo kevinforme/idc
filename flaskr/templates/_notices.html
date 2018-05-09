@@ -2,7 +2,7 @@
     {% for notice in notices %}
         <li class="notice">
             <div class="notice-date">
-                {{ notice.timestamp }}
+                {{ moment(notice.timestamp).format('YYYY年M月D日') }}
             </div>
             <div class="profile-thumbnail">
                 <div class="notice-author">
@@ -12,6 +12,8 @@
             <div class="notice-body" style="color: #333333">
                 <h4>{{ notice.body }}</h4>
             </div>
+            <a href="{{ url_for('main.delete_notice',id=notice.id) }}"><span class="glyphicon glyphicon-trash"
+                                                                             aria-hidden="true"></span></a>
         </li>
         <hr>
     {% endfor %}

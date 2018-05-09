@@ -3,7 +3,7 @@
         <li class="event">
             <a href="{{ url_for('main.event_detail',id=event.id) }}">
             <div class="event-date">
-                {{ event.timestamp }}
+                {{ moment(event.start_time).format('YYYY年M月D日') }}
             </div>
             <div class="profile-thumbnail">
                 <div class="event-author">
