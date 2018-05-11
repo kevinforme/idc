@@ -5,6 +5,20 @@
 {% block container_content %}
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
+            <ul class="nav nav-tabs">
+                <li role="presentation" {% if label==1 %}class="active"{% endif %}><a
+                        href="{{ url_for('main.end_event',eventclass=1) }}">Home</a></li>
+                <li role="presentation" {% if label==2 %}class="active"{% endif %}><a
+                        href="{{ url_for('main.end_event',eventclass=2) }}">Profile</a></li>
+                <li role="presentation" {% if label==3 %}class="active"{% endif %}><a
+                        href="{{ url_for('main.end_event',eventclass=3) }}">Messages</a></li>
+            </ul>
+            <h4>{% if label==1 %}机房日均建设量{% elif label==2 %}客户日均工程量{% elif label==3 %}维护日均工程量{% endif %}
+            :{{ Event.query.filter_by(end=True, eventclass=eventclass).count()/DURATION }}
+            </h4>
+            <h4>总工程量:{{ Event.query.filter_by(end=True, eventclass=eventclass).count() }}
+            </h4>
+            <hr>
             <ul class="events">
                 {% for event in events %}
                     <li class="event">

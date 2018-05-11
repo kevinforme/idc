@@ -6,11 +6,6 @@
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加通知
     </a>
     {% include '_notices.html' %}
-    {% if pagination_notice %}
-        <div class="pagination">
-            {{ macros.pagination_widget(pagination_notice,'.index') }}
-        </div>
-    {% endif %}
 {% endblock %}
 
 {% block col_right %}
@@ -18,4 +13,9 @@
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加事件
     </a>
     {% include '_events.html' %}
+    {% if pagination_event %}
+        <div class="pagination">
+            {{ macros.pagination_widget(pagination_event,'.index') }}
+        </div>
+    {% endif %}
 {% endblock %}

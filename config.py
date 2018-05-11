@@ -1,3 +1,4 @@
+import datetime
 import os
 
 
@@ -5,6 +6,10 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'easy to guess string ? no,no,no.'
 
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+
+    START_TIME = datetime.datetime(2018, 5, 8).timestamp()
+    NOW_TIME = datetime.datetime.now().timestamp()
+    DURATION = (NOW_TIME - START_TIME) / (60 * 60 * 24)
 
     @staticmethod
     def init_app():

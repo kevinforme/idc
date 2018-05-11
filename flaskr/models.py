@@ -49,6 +49,24 @@ class Notice(db.Model):
     author_id = db.Column(db.ForeignKey('users.id'))
 
 
+class EventClass(db.Model):
+    __tablename__ = 'eventclass'
+
+    id = db.Column(db.Integer, primary_key=True)
+    classname = db.Column(db.String(20))
+    events = db.relationship('Event', backref='eventclass', lazy='dynamic')
+
+    @staticmethod
+    def insert_event_classes():
+        event_classes = ['机房建设', '客户施工', '机房维护']
+        for i in event_classes:
+            event_class = EventClass.query.filter_by(classname=i).first()
+            if event_class is None:
+                event_class = EventClass(classname=i)
+            db.session.add(event_class)
+        db.session.commit()
+
+
 class Event(db.Model):
     __tablename__ = 'events'
 
@@ -58,6 +76,7 @@ class Event(db.Model):
     end_time = db.Column(db.DateTime)
     end = db.Column(db.Boolean, index=True, default=False)
     author_id = db.Column(db.ForeignKey('users.id'))
+    class_id = db.Column(db.ForeignKey('eventclass.id'))
     event_details = db.relationship('EventDetail', backref='event', lazy='dynamic')
 
 

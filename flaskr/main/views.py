@@ -5,7 +5,7 @@ from flask_login import current_user
 
 from flaskr import db
 from flaskr.main.forms import NoticeForm, EventForm, EventDetailForm, ResourceForm
-from flaskr.models import Notice, Event, EventDetail, Resource
+from flaskr.models import Notice, Event, EventDetail, Resource, EventClass
 from . import main
 
 
@@ -22,12 +22,12 @@ def shutdown():
 
 @main.route('/')
 def index():
-    page_notice = request.args.get('page', 1, type=int)
-    pagination_notice = Notice.query.order_by(Notice.timestamp.desc()).paginate(page_notice, per_page=10,
+    page_event = request.args.get('page', 1, type=int)
+    pagination_event = Event.query.filter_by(end=False).order_by(Event.start_time.desc()).paginate(page_event, per_page=10,
                                                                                 error_out=False)
-    notices = pagination_notice.items
-    events = Event.query.filter_by(end=False).order_by(Event.start_time.desc()).all()
-    return render_template('index.html', notices=notices, events=events, pagination_notice=pagination_notice)
+    events = pagination_event.items
+    notices = Notice.query.order_by(Notice.timestamp.desc()).all()
+    return render_template('index.html', events=events, pagination_event=pagination_event,notices=notices)
 
 
 @main.route('/edit_notice', methods=['GET', 'POST'])
@@ -45,7 +45,8 @@ def edit_notice():
 def edit_event():
     form = EventForm()
     if form.validate_on_submit():
-        event = Event(author=current_user._get_current_object(), name=form.name.data)
+        event = Event(author=current_user._get_current_object(), name=form.name.data,
+                      eventclass=EventClass.query.get_or_404(form.label.data))
         db.session.add(event)
         flash('发布成功')
         return redirect(url_for('main.index'))
@@ -71,13 +72,16 @@ def edit_detail(id):
     return render_template('edit_detail.html', form=form)
 
 
-@main.route('/end_event')
+@main.route('/end_event/')
 def end_event():
     page = request.args.get('page', 1, type=int)
-    pagination = Event.query.filter_by(end=True).order_by(Event.start_time.desc()).paginate(page, per_page=10,
-                                                                                            error_out=False)
+    label = request.args.get('eventclass', 1, type=int)
+    eventclass = EventClass.query.get_or_404(label)
+    pagination = Event.query.filter_by(end=True, eventclass=eventclass).order_by(Event.start_time.desc()).paginate(page,
+                                                                                                                   per_page=10,
+                                                                                                                   error_out=False)
     events = pagination.items
-    return render_template('end_event.html', events=events, pagination=pagination)
+    return render_template('end_event.html', events=events, pagination=pagination, label=label, Event=Event,eventclass=eventclass)
 
 
 @main.route('/go_end/<int:id>')

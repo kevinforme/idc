@@ -3,8 +3,11 @@ a.navbar-brand img{
     top: -12px;
 }
 body { padding-top: 70px; }
-a.btn_add{
+a.btn_add ,.event_footer{
     border: none;
+}
+.event_footer,.event_footer:hover{
+    background-color: transparent;
 }
 ul{
     list-style: none;
