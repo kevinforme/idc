@@ -5,7 +5,7 @@ from flask_login import current_user
 
 from flaskr import db
 from flaskr.main.forms import NoticeForm, EventForm, EventDetailForm, ResourceForm
-from flaskr.models import Notice, Event, EventDetail, Resource, EventClass
+from flaskr.models import Notice, Event, EventDetail, Resource, EventClass, ResourceClass
 from . import main
 
 
@@ -23,11 +23,12 @@ def shutdown():
 @main.route('/')
 def index():
     page_event = request.args.get('page', 1, type=int)
-    pagination_event = Event.query.filter_by(end=False).order_by(Event.start_time.desc()).paginate(page_event, per_page=10,
-                                                                                error_out=False)
+    pagination_event = Event.query.filter_by(end=False).order_by(Event.start_time.desc()).paginate(page_event,
+                                                                                                   per_page=10,
+                                                                                                   error_out=False)
     events = pagination_event.items
     notices = Notice.query.order_by(Notice.timestamp.desc()).all()
-    return render_template('index.html', events=events, pagination_event=pagination_event,notices=notices)
+    return render_template('index.html', events=events, pagination_event=pagination_event, notices=notices)
 
 
 @main.route('/edit_notice', methods=['GET', 'POST'])
@@ -46,7 +47,7 @@ def edit_event():
     form = EventForm()
     if form.validate_on_submit():
         event = Event(author=current_user._get_current_object(), name=form.name.data,
-                      eventclass=EventClass.query.get_or_404(form.label.data))
+                      eventclass=EventClass.query.filter_by(classname=form.label.data).first())
         db.session.add(event)
         flash('发布成功')
         return redirect(url_for('main.index'))
@@ -76,12 +77,14 @@ def edit_detail(id):
 def end_event():
     page = request.args.get('page', 1, type=int)
     label = request.args.get('eventclass', 1, type=int)
-    eventclass = EventClass.query.get_or_404(label)
+    klass = {1: '机房建设', 2: '客户施工', 3: '机房维护'}
+    eventclass = EventClass.query.filter_by(classname=klass[label]).first()
     pagination = Event.query.filter_by(end=True, eventclass=eventclass).order_by(Event.start_time.desc()).paginate(page,
                                                                                                                    per_page=10,
                                                                                                                    error_out=False)
     events = pagination.items
-    return render_template('end_event.html', events=events, pagination=pagination, label=label, Event=Event,eventclass=eventclass)
+    return render_template('end_event.html', events=events, pagination=pagination, label=label, Event=Event,
+                           eventclass=eventclass)
 
 
 @main.route('/go_end/<int:id>')
@@ -95,18 +98,23 @@ def go_end(id):
 
 @main.route('/resource')
 def resource():
+    resource_class = request.args.get('resource_class', 'profession', type=str)
+    klass = ResourceClass.query.filter_by(name=resource_class).first()
     page = request.args.get('page', 1, type=int)
-    pagination = Resource.query.order_by(Resource.timestamp.desc()).paginate(page, per_page=12,
-                                                                             error_out=False)
+    pagination = Resource.query.filter_by(klass=klass).order_by(Resource.timestamp.desc()).paginate(
+        page, per_page=4,
+        error_out=False)
     resources = pagination.items
-    return render_template('resource.html', resources=resources, pagination=pagination)
+    return render_template('resource.html', resources=resources, pagination=pagination, resource_class=resource_class)
 
 
 @main.route('/edit_resource', methods=['GET', 'POST'])
 def edit_resource():
     form = ResourceForm()
     if form.validate_on_submit():
-        resource = Resource(body=form.body.data, link=form.link.data, author=current_user._get_current_object())
+        klass = ResourceClass.query.filter_by(name=form.resourceClass.data).first()
+        resource = Resource(body=form.body.data, link=form.link.data, author=current_user._get_current_object(),
+                            klass=klass)
         db.session.add(resource)
         return redirect(url_for('main.resource'))
     return render_template('edit_resource.html', form=form)

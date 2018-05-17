@@ -34,7 +34,7 @@
                 </form>
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">{{ current_user.username }}</a></li>
-                    <li><a href="{{ url_for('main.resource') }}">资源</a></li>
+                    <li><a href="{{ url_for('main.resource',resource_class='profession') }}">资源</a></li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
@@ -59,8 +59,14 @@
                 {% block col_right %}{% endblock %}
             </div>
         {% endblock %}
+
     </div>
+    {% block footer %}
+        <footer><h4>用户至上 用心服务</h4><h5>7*24服务电话:0371-65310125</h5><span>Copyright © 2018 中国电信云计算中心</span></footer>
+
+    {% endblock %}
 {% endblock %}
+
 {% block scripts %}
     {{ super() }}
     {{ moment.include_moment() }}

@@ -2,19 +2,21 @@
 {% import '_macros.html' as macros %}
 
 {% block col_left %}
+    <h3>公告栏</h3>
     <a href="{{ url_for('main.edit_notice') }}" class="btn btn-default btn_add">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加通知
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
     </a>
     {% include '_notices.html' %}
 {% endblock %}
 
 {% block col_right %}
+    <h3>事件跟踪</h3>
     <a href="{{ url_for('main.edit_event') }}" class="btn btn-default btn_add">
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加事件
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
     </a>
     {% include '_events.html' %}
     {% if pagination_event %}
-        <div class="pagination">
+        <div class="pagination" id="event_page">
             {{ macros.pagination_widget(pagination_event,'.index') }}
         </div>
     {% endif %}

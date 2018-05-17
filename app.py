@@ -12,7 +12,7 @@ import click
 from flask_migrate import Migrate
 
 from flaskr import create_app, db
-from flaskr.models import User, Notice, EventClass, Event, EventDetail, Resource
+from flaskr.models import User, Notice, EventClass, Event, EventDetail, Resource, ResourceClass
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
@@ -22,7 +22,7 @@ migrate = Migrate(app, db)
 @app.shell_context_processor
 def make_shell_context():
     return dict(db=db, User=User, Notice=Notice, EventClass=EventClass, Event=Event, EventDetail=EventDetail,
-                Resource=Resource)
+                Resource=Resource,ResourceClass=ResourceClass)
 
 
 @app.cli.command()

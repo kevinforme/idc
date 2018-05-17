@@ -7,11 +7,11 @@
         <div class="col-md-8 col-md-offset-2">
             <ul class="nav nav-tabs">
                 <li role="presentation" {% if label==1 %}class="active"{% endif %}><a
-                        href="{{ url_for('main.end_event',eventclass=1) }}">Home</a></li>
+                        href="{{ url_for('main.end_event',eventclass=1) }}">机房建设</a></li>
                 <li role="presentation" {% if label==2 %}class="active"{% endif %}><a
-                        href="{{ url_for('main.end_event',eventclass=2) }}">Profile</a></li>
+                        href="{{ url_for('main.end_event',eventclass=2) }}">客户施工</a></li>
                 <li role="presentation" {% if label==3 %}class="active"{% endif %}><a
-                        href="{{ url_for('main.end_event',eventclass=3) }}">Messages</a></li>
+                        href="{{ url_for('main.end_event',eventclass=3) }}">机房维护</a></li>
             </ul>
             <h4>{% if label==1 %}机房日均建设量{% elif label==2 %}客户日均工程量{% elif label==3 %}维护日均工程量{% endif %}
             :{{ Event.query.filter_by(end=True, eventclass=eventclass).count()/DURATION }}

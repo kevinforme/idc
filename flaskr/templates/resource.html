@@ -3,7 +3,14 @@
 
 {% block container_content %}
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-2">
+            <ul class="nav nav-pills nav-stacked">
+                <li role="presentation" {% if resource_class=='profession' %}class="active"{% endif %}><a href="{{ url_for('main.resource',resource_class='profession') }}">专业技能</a></li>
+                <li role="presentation" {% if resource_class=='tool' %}class="active"{% endif %}><a href="{{ url_for('main.resource',resource_class='tool') }}">工具大全</a></li>
+                <li role="presentation" {% if resource_class=='other' %}class="active"{% endif %}><a href="{{ url_for('main.resource',resource_class='other') }}">其他</a></li>
+            </ul>
+        </div>
+        <div class="col-md-8">
             <a href="{{ url_for('main.edit_resource') }}" class="btn btn-default btn_add">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>添加
             </a>
@@ -28,9 +35,19 @@
                     <hr>
                 {% endfor %}
             </ul>
-            {% if pagination %}
+            {% if pagination and resource_class=='profession' %}
                 <div class="pagination">
-                    {{ macros.pagination_widget(pagination,'.resource') }}
+                    {{ macros.pagination_widget(pagination,'.resource',resource_class='profession') }}
+                </div>
+            {% endif %}
+            {% if pagination and resource_class=='tool' %}
+                <div class="pagination">
+                    {{ macros.pagination_widget(pagination,'.resource',resource_class='tool') }}
+                </div>
+            {% endif %}
+            {% if pagination and resource_class=='other' %}
+                <div class="pagination">
+                    {{ macros.pagination_widget(pagination,'.resource',resource_class='other') }}
                 </div>
             {% endif %}
         </div>

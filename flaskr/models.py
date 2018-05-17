@@ -91,8 +91,29 @@ class EventDetail(db.Model):
 
 
 class Resource(db.Model):
+    __tablename__ = 'resources'
+
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.String(128))
     link = db.Column(db.String(200))
     timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    resource_class = db.Column(db.Integer, db.ForeignKey('resourceclasses.id'), default=2)
+
+
+class ResourceClass(db.Model):
+    __tablename__ = 'resourceclasses'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32))
+    resources = db.relationship('Resource', backref='klass', lazy='dynamic')
+
+    @staticmethod
+    def insert_resource_class():
+        resources = ['profession', 'tool', 'other']
+        for i in resources:
+            klass = ResourceClass.query.filter_by(name=i).first()
+            if klass == None:
+                resourceClass = ResourceClass(name=i)
+                db.session.add(resourceClass)
+        db.session.commit()
