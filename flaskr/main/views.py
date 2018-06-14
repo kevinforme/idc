@@ -102,7 +102,7 @@ def resource():
     klass = ResourceClass.query.filter_by(name=resource_class).first()
     page = request.args.get('page', 1, type=int)
     pagination = Resource.query.filter_by(klass=klass).order_by(Resource.timestamp.desc()).paginate(
-        page, per_page=4,
+        page, per_page=12,
         error_out=False)
     resources = pagination.items
     return render_template('resource.html', resources=resources, pagination=pagination, resource_class=resource_class)

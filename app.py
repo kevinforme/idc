@@ -48,3 +48,9 @@ def test(coverage):
         COV.html_report(directory=covdir)
         print('HTML version: file://%s/index.html' % covdir)
         COV.erase()
+
+
+@app.cli.command()
+def deploy():
+    ResourceClass.insert_resource_class()
+    EventClass.insert_event_classes()
